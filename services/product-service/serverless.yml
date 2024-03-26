@@ -23,6 +23,7 @@ custom:
     excludeFiles: src/**/*.test.js
   autoswagger:
     apiType: http
+    typefiles: []
     basePath: /${sls:stage}
 
 functions:
