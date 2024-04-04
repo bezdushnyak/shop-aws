@@ -12,8 +12,10 @@ package:
 
 plugins:
   - serverless-auto-swagger
+  - serverless-dynamodb
   - serverless-webpack
   - serverless-offline
+  - serverless-offline-watcher
 
 custom:
   webpack:
@@ -21,13 +23,42 @@ custom:
     includeModules: true
     packager: "npm"
     excludeFiles: src/**/*.test.js
+
   autoswagger:
     apiType: http
     typefiles: []
     basePath: /${sls:stage}
 
+  serverless-offline-watcher:
+    - path: src/**/*
+
+  serverless-dynamodb:
+    stages:
+      - ${self:provider.stage}
+    start:
+      port: 8000
+      seed: true
+      migrate: true
+    seed:
+      products:
+        sources:
+          - table: products
+            sources: [./src/data/seed/seedData/products.json]
+          - table: stocks
+            sources: [./src/data/seed/seedData/stocks.json]
+
 functions:
+  createProduct:
+    role: DynamoDBAccessRole
+    handler: src/handlers/createProduct.default
+    events:
+      - http:
+          path: products
+          method: post
+          cors: true
+
   getProductsList:
+    role: DynamoDBAccessRole
     handler: src/handlers/getProductsList.default
     events:
       - http:
@@ -35,8 +66,64 @@ functions:
           method: get
 
   getProductById:
+    role: DynamoDBAccessRole
     handler: src/handlers/getProductById.default
     events:
       - http:
           path: products/{productId}
           method: get
+
+resources:
+  Resources:
+    productsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: products
+        TableClass: STANDARD
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    stocksTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: stocks
+        TableClass: STANDARD
+        AttributeDefinitions:
+          - AttributeName: productId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: productId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    DynamoDBAccessRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: DynamoDBAccessRole
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: DynamoDBAccess
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - dynamodb:*
+                    - lambda:*
+                  Resource: "*"
