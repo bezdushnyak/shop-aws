@@ -12,7 +12,7 @@ export const getProductsUseCase = async ({ productsGateway }) => {
 
 export const lambdaHandler = async (event) => {
   console.log("getProducts Lambda");
-  console.log(`createProduct request - ${event}`);
+  console.log(`getProducts request - ${event}`);
 
   const productsGateway = new ProductsGateway();
   const products = await getProductsUseCase({ productsGateway });
