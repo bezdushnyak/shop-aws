@@ -23,8 +23,8 @@ export const getProductByIdUseCase = async ({ productId, productsGateway }) => {
 
 export const lambdaHandler = async (event) => {
   console.log("getProductById Lambda");
-  console.log(`createProduct request - ${event}`);
-  console.log(`createProduct pathParameters - ${event.pathParameters}`);
+  console.log(`getProductById request - ${event}`);
+  console.log(`getProductById pathParameters - ${event.pathParameters}`);
 
   const { productId } = event.pathParameters;
   const productsGateway = new ProductsGateway();

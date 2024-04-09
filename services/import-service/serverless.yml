@@ -1,0 +1,72 @@
+service: import-service
+
+provider:
+  name: aws
+  stage: dev
+  region: eu-north-1
+  runtime: nodejs18.x
+  profile: serverless
+  environment:
+    AWS_S3_BUCKET: aws-shop-import-service-s3
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "arn:aws:s3:::${self:provider.environment.AWS_S3_BUCKET}/*"
+
+package:
+  individually: true
+
+plugins:
+  - serverless-auto-swagger
+  - serverless-webpack
+  - serverless-s3-local
+  - serverless-offline
+  - serverless-offline-watcher
+
+custom:
+  webpack:
+    webpackConfig: "webpack.config.js"
+    includeModules: true
+    packager: "npm"
+
+  autoswagger:
+    apiType: http
+    typefiles: []
+    basePath: /${sls:stage}
+
+  serverless-offline:
+    httpPort: 3002
+    lambdaPort: 3003
+
+  serverless-offline-watcher:
+    - path: src/**/*
+
+  s3:
+    host: localhost
+    port: 7777
+    cors: ./s3-local-cors.xml
+    allowMismatchedSignatures: true
+
+functions:
+  importProductsFile:
+    handler: src/handlers/importProductsFile.default
+    events:
+      - http:
+          path: import
+          method: get
+          request:
+            parameters:
+              querystrings:
+                name: true
+
+  importFileParser:
+    handler: src/handlers/importFileParser.default
+    events:
+      - s3:
+          bucket: ${self:provider.environment.AWS_S3_BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true
+          forceDeploy: true
