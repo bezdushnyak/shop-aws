@@ -1,15 +1,25 @@
 import middy from "@middy/core";
 import errorLogger from "@middy/error-logger";
+import httpErrorHandler from "@middy/http-error-handler";
 import httpCors from "@middy/http-cors";
 
 import { CORS_ORIGINS_WHITE_LIST } from "../cors.js";
+import ProductsGateway from "@data/dynamodb/ProductsGateway.js";
 
-export const lambdaHandler = async () => {
-  const { default: mockData } = await import("../mockData.json");
+export const getProductsUseCase = async ({ productsGateway }) => {
+  return productsGateway.getAllProducts();
+};
+
+export const lambdaHandler = async (event) => {
+  console.log("getProducts Lambda");
+  console.log(`getProducts request - ${event}`);
+
+  const productsGateway = new ProductsGateway();
+  const products = await getProductsUseCase({ productsGateway });
 
   return {
     statusCode: 200,
-    body: JSON.stringify(mockData),
+    body: JSON.stringify(products),
   };
 };
 
@@ -20,4 +30,5 @@ export default middy()
       origins: CORS_ORIGINS_WHITE_LIST,
     })
   )
+  .use(httpErrorHandler())
   .handler(lambdaHandler);

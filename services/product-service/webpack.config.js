@@ -1,4 +1,5 @@
 const path = require("path");
+const DotenvWebpackPlugin = require("dotenv-webpack");
 const nodeExternals = require("webpack-node-externals");
 const slsw = require("serverless-webpack");
 
@@ -11,6 +12,9 @@ module.exports = {
   devtool: "source-map",
   resolve: {
     extensions: [".js", ".json"],
+    alias: {
+      "@data": path.resolve(__dirname, "./src/data/"),
+    },
   },
   output: {
     libraryTarget: "commonjs2",
@@ -32,4 +36,5 @@ module.exports = {
       },
     ],
   },
+  plugins: [new DotenvWebpackPlugin()],
 };

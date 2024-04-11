@@ -1,0 +1,32 @@
+[
+  {
+    "id": "4b444d8c-ba28-4267-b138-7b33daba5daf",
+    "title": "Open Circuits: The Inner Beauty of Electronic Components",
+    "description": "Open Circuits is a photographic exploration of the beautiful design inside everyday electronics. Its stunning cross-section photography unlocks a hidden world full of elegance, subtle complexity, and wonder.",
+    "price": 10.99
+  },
+  {
+    "id": "e79a3612-7140-4f90-8b03-daf3f3ed5952",
+    "title": "The Physics of Everyday Things: The Extraordinary Science Behind an Ordinary Day",
+    "description": "Physics professor, best-selling author, and dynamic storyteller James Kakalios reveals the mind-bending science behind the seemingly basic things that keep our daily lives running, from our smartphones and digital \"clouds\" to X-ray machines and hybrid vehicles.",
+    "price": 8.69
+  },
+  {
+    "id": "2b8e941c-338b-4e14-b177-4f9169e796ff",
+    "title": "Ugly’s Electrical References",
+    "description": "Ugly’s Electrical References, 2020 Edition is the gold standard on-the-job reference tool of choice for electrical industry professionals. Offering the most pertinent, up-to-date information used by electricians, including: updated NEC code and table change information, mathematical formulas, NEMA wiring configurations, conduit bending guide, ampacity and conduit fill information, transformer and control circuit wiring diagrams, and conversion tables. New Features of this Edition: • Updated to reflect changes to the 2020 National Electrical Code (NEC) • Expanded coverage of the following topics: o Junction Box size calculations o Selecting, testing, and using multimeters to measure voltage, resistance, and current o Selecting, testing, and using a clamp-on ammeter to measure current o Selecting, testing, and using a non-contact voltage tester.",
+    "price": 7.77
+  },
+  {
+    "id": "1a9c0111-b630-41bd-a8b1-a1c27af7f1fd",
+    "title": "The Innovators: How a Group of Hackers, Geniuses, and Geeks Created the Digital Revolution",
+    "description": "2015 Audie Award Finalist for Non-Fiction",
+    "price": 20.0
+  },
+  {
+    "id": "2086f666-7bb1-43d5-96d1-50bc8f3282e1",
+    "title": "The Art of Electronics 3rd Edition",
+    "description": "At long last, here is the thoroughly revised and updated third edition of the hugely successful The Art of Electronics. It is widely accepted as the best single authoritative book on electronic circuit design. In addition to new or enhanced coverage of many topics, the third edition includes 90 oscilloscope screenshots illustrating the behavior of working circuits, dozens of graphs giving highly useful measured data of the sort that is often buried or omitted in datasheets but which you need when designing circuits, and 80 tables (listing some 1650 active components), enabling intelligent choice of circuit components by listing essential characteristics (both specified and measured) of available parts. The new Art of Electronics retains the feeling of informality and easy access that helped make the earlier editions so successful and popular. It is an indispensable reference and the gold standard for anyone, student or researcher, professional or amateur, who works with electronic circuits.",
+    "price": 11.99
+  }
+]

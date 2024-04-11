@@ -1,12 +1,17 @@
-import { it, expect } from "vitest";
+import { it, expect, vi } from "vitest";
 
-import { lambdaHandler } from "./getProductsList.js";
-import mockData from "../mockData.json";
+import { getProductsUseCase } from "./getProductsList.js";
+import ProductsGateway from "../data/dynamodb/ProductsGateway.js";
 
 it("should return all products without errors", async () => {
-  const response = await lambdaHandler();
-  expect(response).toEqual({
-    statusCode: 200,
-    body: JSON.stringify(mockData),
-  });
+  const expectedResult = Symbol("Result");
+  const productsGateway = new ProductsGateway();
+  const getAllProductsSpy = vi
+    .spyOn(productsGateway, "getAllProducts")
+    .mockImplementation(() => expectedResult);
+
+  const result = await getProductsUseCase({ productsGateway });
+
+  expect(getAllProductsSpy).toBeCalled();
+  expect(result).toEqual(expectedResult);
 });

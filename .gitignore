@@ -43,3 +43,5 @@ Thumbs.db
 .serverless
 .webpackCache
 swagger
+.dynamodb
+.env
