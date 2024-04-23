@@ -44,4 +44,6 @@ Thumbs.db
 .webpackCache
 swagger
 .dynamodb
+buckets
 .env
+.local.env

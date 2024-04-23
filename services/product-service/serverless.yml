@@ -6,6 +6,11 @@ provider:
   region: eu-north-1
   runtime: nodejs18.x
   profile: serverless
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: "*"
 
 package:
   individually: true
@@ -29,6 +34,10 @@ custom:
     typefiles: []
     basePath: /${sls:stage}
 
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 3001
+
   serverless-offline-watcher:
     - path: src/**/*
 
@@ -49,7 +58,6 @@ custom:
 
 functions:
   createProduct:
-    role: DynamoDBAccessRole
     handler: src/handlers/createProduct.default
     events:
       - http:
@@ -58,7 +66,6 @@ functions:
           cors: true
 
   getProductsList:
-    role: DynamoDBAccessRole
     handler: src/handlers/getProductsList.default
     events:
       - http:
@@ -66,7 +73,6 @@ functions:
           method: get
 
   getProductById:
-    role: DynamoDBAccessRole
     handler: src/handlers/getProductById.default
     events:
       - http:
@@ -104,26 +110,3 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-
-    DynamoDBAccessRole:
-      Type: AWS::IAM::Role
-      Properties:
-        RoleName: DynamoDBAccessRole
-        AssumeRolePolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: Allow
-              Principal:
-                Service:
-                  - lambda.amazonaws.com
-              Action: sts:AssumeRole
-        Policies:
-          - PolicyName: DynamoDBAccess
-            PolicyDocument:
-              Version: "2012-10-17"
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - dynamodb:*
-                    - lambda:*
-                  Resource: "*"

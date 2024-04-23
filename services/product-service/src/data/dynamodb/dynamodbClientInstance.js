@@ -1,17 +1,22 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 const getDynamodbClient = () => {
+  let configuration = {
+    region: process.env.AWS_REGION,
+  };
+
   if (process.env.IS_OFFLINE) {
-    return new DynamoDBClient({
-      region: "localhost",
+    configuration = {
       endpoint: "http://localhost:8000",
-      accessKeyId: process.env.AWS_ACCESS_KEY,
-      secretAccessKey: process.env.AWS_SECRET_KEY,
-    });
+      region: "localhost",
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+    };
   }
 
-  return new DynamoDBClient();
+  return new DynamoDBClient(configuration);
 };
 
-const dynamodbClient = getDynamodbClient();
-export default dynamodbClient;
+export default getDynamodbClient();
