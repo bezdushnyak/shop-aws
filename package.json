@@ -2,7 +2,10 @@
   "name": "shop-aws",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "nx run-many --target=dev --all --maxParallel=8",
+    "deploy": "nx run-many --target=deploy --all --maxParallel=8"
+  },
   "devDependencies": {
     "@nx/js": "18.1.2",
     "nx": "18.1.2"
