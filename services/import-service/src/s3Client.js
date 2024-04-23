@@ -8,8 +8,8 @@ const configureS3Client = () => {
   if (process.env.IS_OFFLINE) {
     configuration.forcePathStyle = true;
     configuration.credentials = {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      accessKeyId: "S3RVER",
+      secretAccessKey: "S3RVER",
     };
     configuration.endpoint = "http://localhost:7777";
   }

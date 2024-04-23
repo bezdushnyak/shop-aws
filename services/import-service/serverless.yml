@@ -8,11 +8,18 @@ provider:
   profile: serverless
   environment:
     AWS_S3_BUCKET: aws-shop-import-service-s3
+    AWS_SQS_QUEUE_NAME:
+      Fn::ImportValue: CatalogItemsQueueName
   iamRoleStatements:
     - Effect: Allow
       Action:
         - s3:*
-      Resource: "arn:aws:s3:::${self:provider.environment.AWS_S3_BUCKET}/*"
+      Resource: arn:aws:s3:::${self:provider.environment.AWS_S3_BUCKET}/*
+    - Effect: Allow
+      Action:
+        - sqs:*
+      Resource:
+        Fn::ImportValue: CatalogItemsQueueArn-${sls:stage}
 
 package:
   individually: true

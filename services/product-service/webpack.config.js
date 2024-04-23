@@ -14,6 +14,8 @@ module.exports = {
     extensions: [".js", ".json"],
     alias: {
       "@data": path.resolve(__dirname, "./src/data/"),
+      "@config": path.resolve(__dirname, "./src/config/"),
+      "@services": path.resolve(__dirname, "./src/services/"),
     },
   },
   output: {
