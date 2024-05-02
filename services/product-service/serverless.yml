@@ -32,9 +32,9 @@ plugins:
 
 custom:
   webpack:
-    webpackConfig: "webpack.config.js"
+    webpackConfig: webpack.config.js
     includeModules: true
-    packager: "npm"
+    packager: npm
     excludeFiles: src/**/*.test.js
 
   autoswagger:
