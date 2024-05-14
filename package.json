@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "nx run-many --target=dev --all --maxParallel=8",
+    "start": "nx run-many --target=dev --all --maxParallel=8",
     "deploy": "nx run-many --target=deploy --all --maxParallel=8"
   },
   "devDependencies": {

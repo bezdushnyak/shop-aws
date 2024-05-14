@@ -6,11 +6,19 @@ provider:
   region: eu-north-1
   runtime: nodejs18.x
   profile: serverless
+  environment:
+    AWS_SQS_QUEUE_NAME: catalogItemsQueue
+    AWS_SNS_TOPIC_NAME: createProductTopic
+    AWS_SNS_TOPIC_ARN: !Ref CreateProductTopic
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:*
       Resource: "*"
+    - Effect: Allow
+      Action:
+        - sns:*
+      Resource: ${self:provider.environment.AWS_SNS_TOPIC_ARN}
 
 package:
   individually: true
@@ -24,9 +32,9 @@ plugins:
 
 custom:
   webpack:
-    webpackConfig: "webpack.config.js"
+    webpackConfig: webpack.config.js
     includeModules: true
-    packager: "npm"
+    packager: npm
     excludeFiles: src/**/*.test.js
 
   autoswagger:
@@ -79,6 +87,15 @@ functions:
           path: products/{productId}
           method: get
 
+  catalogBatchProcess:
+    handler: src/handlers/catalogBatchProcess.default
+    events:
+      - sqs:
+          arn: !GetAtt
+            - CatalogItemsQueue
+            - Arn
+          batchSize: 5
+
 resources:
   Resources:
     productsTable:
@@ -110,3 +127,39 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+    CatalogItemsQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:provider.environment.AWS_SQS_QUEUE_NAME}
+
+    CreateProductTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:provider.environment.AWS_SNS_TOPIC_NAME}
+
+    Email1Subscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: giwine2365@dxice.com
+        Protocol: email
+        TopicArn: !Ref CreateProductTopic
+        FilterPolicy: '{"sumPrice": [{ "numeric": [">", 7] }]}'
+
+    Email2Subscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: 35hqepm0pg@mailcurity.com
+        Protocol: email
+        TopicArn: !Ref CreateProductTopic
+
+  Outputs:
+    CatalogItemsQueueArn:
+      Value: !GetAtt CatalogItemsQueue.Arn
+      Export:
+        Name: CatalogItemsQueueArn-${sls:stage}
+
+    CatalogItemsQueueName:
+      Value: ${self:provider.environment.AWS_SQS_QUEUE_NAME}
+      Export:
+        Name: CatalogItemsQueueName
