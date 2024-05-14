@@ -5,7 +5,7 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 
-import dynamodbClient from "./dynamodbClientInstance";
+import dynamodbClient from "@config/dynamodbClient";
 
 class ProductsGateway {
   productsTableName = "products";
