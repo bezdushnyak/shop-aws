@@ -12,9 +12,6 @@ module.exports = {
   devtool: "source-map",
   resolve: {
     extensions: [".js", ".json"],
-    alias: {
-      "@data": path.resolve(__dirname, "./src/data/"),
-    },
   },
   output: {
     libraryTarget: "commonjs2",

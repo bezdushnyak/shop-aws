@@ -1,0 +1,21 @@
+service: authorization-service
+
+provider:
+  name: aws
+  stage: dev
+  region: eu-north-1
+  runtime: nodejs18.x
+  profile: serverless
+
+plugins:
+  - serverless-dotenv-plugin
+
+functions:
+  basicAuthorizer:
+    handler: src/handlers/basicAuthorizer.authorizer
+
+resources:
+  Outputs:
+    BasicAuthorizerLambdaFunctionQualifiedArn:
+      Export:
+        Name: BasicAuthorizer-${sls:stage}

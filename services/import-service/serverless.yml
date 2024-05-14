@@ -33,9 +33,9 @@ plugins:
 
 custom:
   webpack:
-    webpackConfig: "webpack.config.js"
+    webpackConfig: webpack.config.js
     includeModules: true
-    packager: "npm"
+    packager: npm
 
   autoswagger:
     apiType: http
@@ -62,10 +62,16 @@ functions:
       - http:
           path: import
           method: get
+          cors: true
           request:
             parameters:
               querystrings:
                 name: true
+          authorizer:
+            name: SharedAuthorizer
+            arn:
+              Fn::ImportValue: BasicAuthorizer-${sls:stage}
+            type: request
 
   importFileParser:
     handler: src/handlers/importFileParser.default
@@ -77,3 +83,15 @@ functions:
             - prefix: uploaded/
           existing: true
           forceDeploy: true
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: "AWS::ApiGateway::GatewayResponse"
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: "ApiGatewayRestApi"
